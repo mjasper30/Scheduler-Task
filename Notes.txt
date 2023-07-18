@@ -1,0 +1,18 @@
+na real time na ang counter or timer through ajax
+
+
+elapse nlng kulang
+
+- now that when the timer is set it will go yellow means on going
+and if it lapse changes to red 
+
+problem/error 
+- now the error is that when the first task lapses the other task will not dsiplay properly in the table they will all display with one text 
+
+------------------------------------------------------------------------------------------------
+finished already
+-fixed teh tables not changing colors and data not outputted correctly
+-fixed the alert where the alert once shows and never again
+
+This code has the modal and text to speech when the time has elapsed
+
