@@ -150,34 +150,32 @@ if (isset($_POST['submitTask'])) {
     <h1>Task Scheduler</h1>
     <br>
 
-    <div>
+    <div class="container">
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-            <div class="container">
-                <label for="taskName">Task Name:</label>
-                <input type="text" id="taskName" name="taskName" placeholder="Input task name here" required>
-                <div class="input-container">
-                    <label for="startTime">Start Time:</label>
-                    <input type="time" id="startTime" name="startTime" required>
+            <label for="taskName">Task Name:</label>
+            <input type="text" id="taskName" name="taskName" placeholder="Input task name here" required>
+            <div class="input-container mt-3">
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" name="startTime" required>
+            </div>
+            <label for="Priority">Priority</label>
+            <div class="input-group mb-3" style="width: 25%;">
+                <div class="input-group">
+                    <select class="custom-select form-control" id="inputGroupSelect04" name="priority" required>
+                        <!-- kaya ayaw mag required sa select form kahit may required na tag wala value sa choose priority -->
+                        <option selected disabled value="">Choose the priority</option>
+                        <option value="High">High</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Minimal">Minimal</option>
+                    </select>
                 </div>
-                <label for="Priority">Priority</label>
-                <div class="input-group mb-3" style="width: 25%;">
-                    <div class="input-group">
-                        <select class="custom-select form-control" id="inputGroupSelect04" name="priority" required>
-                            <!-- kaya ayaw mag required sa select form kahit may required na tag wala value sa choose priority -->
-                            <option selected disabled value="">Choose the priority</option>
-                            <option value="High">High</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Minimal">Minimal</option>
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <button onclick="convertToSpeech()" name="submitTask" class="btn btn-success" style="margin-left: 10px;">Schedule a task</button>
-
+            </div>
+            <br>
+            <button onclick="convertToSpeech()" name="submitTask" class="btn btn-success" style="margin-left: 10px;">Schedule a task</button>
         </form>
+
         <button onclick="deleteDataAll()" class="btn btn-warning" style="margin-left: 10px;">Clear all tasks</button>
-    </div>
-    <!-- kaya hindi nag dikit ang button nasa baba ng delete button ang form reminder tags CLOSINGS!!! -->
+        <!-- kaya hindi nag dikit ang button nasa baba ng delete button ang form reminder tags CLOSINGS!!! -->
     </div>
     <br>
 
@@ -293,15 +291,15 @@ if (isset($_POST['submitTask'])) {
                 type: "POST",
                 data: {
                     taskId: id
-                }, // !Send the ID to the PHP script
+                }, // *Send the ID to the PHP script
                 success: function(response) {
-                    // !Handle the response from the server
+                    // *Handle the response from the server
                     console.log(response);
-                    // !Load data after successful deletion
+                    // *Load data after successful deletion
                     loadData(); // Call a function to load data or perform any desired actions
                 },
                 error: function(xhr, status, error) {
-                    // !Handle error if AJAX request fails
+                    // *Handle error if AJAX request fails
                     console.log(xhr.responseText);
                 }
             });
@@ -369,6 +367,7 @@ if (isset($_POST['submitTask'])) {
         // }
 
         // *Elapsed Text to Speech
+        // * TEXT TO SPEECH THE TASK NAME WHEN TEH TIME HAS ELAPSED
         function convertToSpeechElapse(taskName) {
             // Get the text input from the user
 

@@ -50,6 +50,22 @@ if ($result->num_rows > 0) {
         $minutes = gmdate('i', $remainingTime);
         $seconds = gmdate('s', $remainingTime);
 
+        // ! Modify by jasper
+        // Get the current time
+        $currentTimestamp = time();
+
+        // Get the target time (startDateTime from the database)
+        $startDateTime = $row['startTime'];
+        $targetTimestamp = strtotime($startDateTime);
+
+        // Calculate the elapsed time in seconds
+        $elapsedTime = $currentTimestamp - $targetTimestamp;
+
+        // Convert the elapsed time to hours, minutes, and seconds
+        $hoursCurrent = floor($elapsedTime / 3600);
+        $minutesCurrent = floor(($elapsedTime % 3600) / 60);
+        $secondsCurrent = $elapsedTime % 60;
+
         // Modal logic
         if ($remainingTime == 0) {
 
@@ -131,9 +147,15 @@ if ($result->num_rows > 0) {
         $tableHtml .= "<td>$readableFormat</td>";
         $tableHtml .= "<td>$taskName</td>";
         $tableHtml .= "<td>$startTime</td>";
-        $tableHtml .= "<td>$hours</td>";
-        $tableHtml .= "<td>$minutes</td>";
-        $tableHtml .= "<td>$seconds</td>";
+        if ($remainingTime < 0) {
+            $tableHtml .= "<td>$hoursCurrent</td>";
+            $tableHtml .= "<td>$minutesCurrent</td>";
+            $tableHtml .= "<td>$secondsCurrent</td>";
+        } else {
+            $tableHtml .= "<td>$hours</td>";
+            $tableHtml .= "<td>$minutes</td>";
+            $tableHtml .= "<td>$seconds</td>";
+        }
         $tableHtml .= "<td>$remainingTime</td>";
 
         if ($remainingTime < 0) {
