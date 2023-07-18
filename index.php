@@ -64,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
 </html>
 
 <!DOCTYPE html>
@@ -96,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
 
-        <p class="mt-3">Don't have an account? <a href="sign_in.php">Sign up</a></p>
+        <p class="mt-3">Don't have an account? <a href="sign_in.php">Sign in here</a></p>
     </div>
 
     <!-- Add Bootstrap JS (Optional) -->

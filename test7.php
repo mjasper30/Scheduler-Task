@@ -143,33 +143,33 @@ if (isset($_POST['submitTask'])) {
     <h1>Task Scheduler</h1>
     <br>
 
-    <div class="container">
+
+    <div class="container mt-5">
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-            <label for="taskName">Task Name:</label>
-            <input type="text" id="taskName" name="taskName" placeholder="Input task name here" required>
-            <div class="input-container mt-3">
-                <label for="startTime">Start Time:</label>
-                <input type="time" id="startTime" name="startTime" required>
+            <div class="mb-3">
+                <label for="taskName" class="form-label">Task Name:</label>
+                <input type="text" id="taskName" name="taskName" class="form-control" placeholder="Input task name here" required>
             </div>
-            <label for="Priority">Priority</label>
-            <div class="input-group mb-3" style="width: 25%;">
-                <div class="input-group">
-                    <select class="custom-select form-control" id="inputGroupSelect04" name="priority" required>
-                        <!-- kaya ayaw mag required sa select form kahit may required na tag wala value sa choose priority -->
-                        <option selected disabled value="">Choose the priority</option>
-                        <option value="High">High</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Minimal">Minimal</option>
-                    </select>
-                </div>
+            <div class="mb-3">
+                <label for="startTime" class="form-label">Start Time:</label>
+                <input type="time" id="startTime" name="startTime" class="form-control" required>
             </div>
-            <br>
-            <button onclick="convertToSpeech()" name="submitTask" class="btn btn-success" style="margin-left: 10px;">Schedule a task</button>
+            <div class="mb-3">
+                <label for="priority" class="form-label">Priority:</label>
+                <select class="form-select" id="priority" name="priority" required>
+                    <option selected disabled value="">Choose the priority</option>
+                    <option value="High">High</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Minimal">Minimal</option>
+                </select>
+            </div>
+            <button onclick="convertToSpeech()" name="submitTask" class="btn btn-success">Schedule a task</button>
         </form>
 
-        <button onclick="deleteDataAll()" class="btn btn-warning" style="margin-left: 10px;">Clear all tasks</button>
-        <a href="logout.php" class="btn btn-danger" style="margin-left: 10px;">Logout</a>
-
+        <div class="mt-3">
+            <button onclick="deleteDataAll()" class="btn btn-warning mr-2">Clear all tasks</button>
+            <a href="logout.php" class="btn btn-danger">Logout</a>
+        </div>
     </div>
     <br>
 
