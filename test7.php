@@ -11,6 +11,7 @@
 <!-- file with modal and text to speach at the end -->
 
 <?php
+session_start();
 // Replace with your database connection details
 date_default_timezone_set('Asia/Manila');
 $servername = "localhost";
@@ -36,10 +37,11 @@ if (isset($_POST['submitTask'])) {
     $taskName = $_POST['taskName'];
     $startTime = $_POST['startTime'];
     $priority = $_POST['priority'];
+    $username = $_SESSION['username'];
 
 
     // Insert task into the database
-    $sql = "INSERT INTO tasks (taskName, startTime, priority) VALUES ('$taskName', '$startTime', '$priority')";
+    $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>alert('Task scheduled successfully');</script>";
@@ -147,6 +149,7 @@ if (isset($_POST['submitTask'])) {
 </head>
 
 <body>
+    <?php echo $_SESSION['username']; ?>
     <h1>Task Scheduler</h1>
     <br>
 
@@ -175,7 +178,8 @@ if (isset($_POST['submitTask'])) {
         </form>
 
         <button onclick="deleteDataAll()" class="btn btn-warning" style="margin-left: 10px;">Clear all tasks</button>
-        <!-- kaya hindi nag dikit ang button nasa baba ng delete button ang form reminder tags CLOSINGS!!! -->
+        <a href="logout.php" class="btn btn-outline-danger" style="margin-left: 10px;">Logout</a>
+
     </div>
     <br>
 

@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Replace with your database connection details
 date_default_timezone_set('Asia/Manila');
 $servername = "localhost";
@@ -11,9 +12,10 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+$username = $_SESSION['username'];
 
 // Fetch tasks from the database
-$sql = "SELECT * FROM tasks";
+$sql = "SELECT * FROM tasks WHERE username = '$username'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
