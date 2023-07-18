@@ -52,7 +52,7 @@ if ($result->num_rows > 0) {
         $minutes = gmdate('i', $remainingTime);
         $seconds = gmdate('s', $remainingTime);
 
-        // ! Modify by jasper
+        // ! Modify by jasper make it so that when time elapses instead of 24 hour count start from 0 seconds
         // Get the current time
         $currentTimestamp = time();
 
@@ -136,6 +136,7 @@ if ($result->num_rows > 0) {
 
             //  text to speech elapse
             echo "<script>convertToSpeechElapse('" . $taskName . "');</script>";
+
             // ! sleep did not work on delaying the modal it delayed this whole condition
             // sleep(3);
 

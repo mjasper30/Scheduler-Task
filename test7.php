@@ -1,15 +1,3 @@
-<!-- Almost Complete the error now is the numbers in the hr mn sc row and elapsed time -->
-<!-- AJAX NLNG KULANG FOR REAL TIME  -->
-<!-- ELAPSED NEXT -->
-<!-- BUTTONS FOR CLEAR ROW AND TASK DONE -->
-<!-- DATE TODAY NOW ADDED -->
-<!-- almost complete with the help of jasper -->
-<!-- since task 6.php failed now coding it here -->
-<!-- added clear all task so that it deletes everything on the database -->
-<!-- php used delete_data_all.php, load_data.php, delete_data.php -->
-
-<!-- file with modal and text to speach at the end -->
-
 <?php
 session_start();
 // Replace with your database connection details
@@ -39,6 +27,7 @@ if (isset($_POST['submitTask'])) {
     $priority = $_POST['priority'];
     $username = $_SESSION['username'];
 
+    // !added the session username for roles like user or admin
 
     // Insert task into the database
     $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
@@ -149,6 +138,7 @@ if (isset($_POST['submitTask'])) {
 </head>
 
 <body>
+    <!-- Test to see if the username displays in the session -->
     <?php echo $_SESSION['username']; ?>
     <h1>Task Scheduler</h1>
     <br>
@@ -178,7 +168,7 @@ if (isset($_POST['submitTask'])) {
         </form>
 
         <button onclick="deleteDataAll()" class="btn btn-warning" style="margin-left: 10px;">Clear all tasks</button>
-        <a href="logout.php" class="btn btn-outline-danger" style="margin-left: 10px;">Logout</a>
+        <a href="logout.php" class="btn btn-danger" style="margin-left: 10px;">Logout</a>
 
     </div>
     <br>

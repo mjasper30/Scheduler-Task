@@ -12,15 +12,15 @@ if (!$conn) {
 }
 
 // Get the ID from the AJAX request
-$id = $_POST['taskId'];
+$id = $_POST['$username'];
 
 // Delete data based on ID
-$sql = "DELETE FROM tasks";
+$sql = "DELETE FROM tasks WHERE username = '$username'";
 
 if (mysqli_query($conn, $sql)) {
-    echo "Data deleted successfully.";
+    echo "Tasks deleted successfully.";
 } else {
-    echo "Error deleting data: " . mysqli_error($conn);
+    echo "Error deleting tasks: " . mysqli_error($conn);
 }
 
 // Close the database connection (similar to previous steps)
