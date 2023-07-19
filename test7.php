@@ -1,4 +1,5 @@
 <?php
+// ! Start Session in the code
 session_start();
 // Replace with your database connection details
 date_default_timezone_set('Asia/Manila');
@@ -143,8 +144,8 @@ if (isset($_POST['submitTask'])) {
     <h1>Task Scheduler</h1>
     <br>
 
-
-    <div class="container mt-5">
+    <!-- !Edited here for a better look in the user page -->
+    <div class="container mt-2">
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <div class="mb-3">
                 <label for="taskName" class="form-label">Task Name:</label>
@@ -152,11 +153,11 @@ if (isset($_POST['submitTask'])) {
             </div>
             <div class="mb-3">
                 <label for="startTime" class="form-label">Start Time:</label>
-                <input type="time" id="startTime" name="startTime" class="form-control" required>
+                <input type="time" id="startTime" name="startTime" class="form-select-sm" required>
             </div>
             <div class="mb-3">
                 <label for="priority" class="form-label">Priority:</label>
-                <select class="form-select" id="priority" name="priority" required>
+                <select class="form-select-sm" id="priority" name="priority" required>
                     <option selected disabled value="">Choose the priority</option>
                     <option value="High">High</option>
                     <option value="Normal">Normal</option>
@@ -170,7 +171,24 @@ if (isset($_POST['submitTask'])) {
             <button onclick="deleteDataAll()" class="btn btn-warning mr-2">Clear all tasks</button>
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </div>
+        <!-- !this code is newly added -->
+
+        <div class="container mt-2">
+            <label for="priorityFilter" class="form-label">Filter by Priority:</label>
+            <select class="form-select-sm" id="priorityFilter" name="priorityFilter" onchange="filterTasksByPriority()">
+                <option selected value="">All Priorities</option>
+                <option value="High">High</option>
+                <option value="Normal">Normal</option>
+                <option value="Minimal">Minimal</option>
+            </select>
+        </div>
+
+        <div class="mt-2">
+            <button onclick="confirmFilterByPriority()" class="btn btn-primary mr-2">Confirm Filter</button>
+        </div>
+
     </div>
+
     <br>
 
     <table class='table' id="taskTable">
@@ -232,6 +250,9 @@ if (isset($_POST['submitTask'])) {
     </table>
 
     <script>
+        // ! this code is newly added
+        var selectedPriority = "";
+
         $(document).ready(function() {
             // event.preventDefault(); // Prevent the default form submission behavior
 
@@ -241,7 +262,75 @@ if (isset($_POST['submitTask'])) {
             // Update the time values every second
             setInterval(loadData, 1000);
             setInterval(updateTimeValues, 1000);
+
+            // ! this code is newly added
+            // loadAllTasks();
+
+
         });
+        // ! this code is newly added
+        function confirmFilterByPriority() {
+            displaySelectedPriority(selectedPriority);
+        }
+
+        // ! this code is newly added
+        function displaySelectedPriority() {
+            // Hide all table rows
+            $("#taskTable tbody tr").hide();
+
+            if (selectedPriority === "") {
+                // If the "All Priorities" option is selected, show all table rows
+                $("#taskTable tbody tr").show();
+            } else {
+                // Show table rows with the selected priority
+                $("#taskTable tbody tr:has(th:contains('" + selectedPriority + "'))").show();
+            }
+        }
+
+        // ! this code is newly added
+        // function loadAllTasks() {
+
+        //     $.ajax({
+        //         url: "load_data.php",
+        //         type: "GET",
+        //         success: function(response) {
+        //             // Handle the response and update the table with the loaded data
+        //             filterTasksByPriority(); // Filter the tasks based on the selected priority
+        //             $("#taskTable tbody").html(response);
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.log(xhr.responseText);
+        //         }
+        //     });
+        // }
+
+        // ! this code is newly added
+        function filterTasksByPriority() {
+            selectedPriority = $("#priorityFilter").val();
+
+            if (selectedPriority === "") {
+                // If the "All Priorities" option is selected, load all tasks
+                loadData();
+            } else {
+                // Perform actions to filter tasks by priority
+                // For example, make an AJAX request to fetch tasks with the selected priority
+                $.ajax({
+                    url: "load_data.php",
+                    type: "GET",
+                    data: {
+                        priority: selectedPriority
+                    },
+                    success: function(response) {
+                        // Handle the response and update the table with the filtered data
+                        $("#taskTable tbody").html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+        }
+
 
         function updateTimeValues() {
             // Iterate through each table row and update the time values

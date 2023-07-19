@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Establish database connection (similar to previous steps)
 $hostname = "localhost";
 $username = "root";
@@ -12,7 +13,8 @@ if (!$conn) {
 }
 
 // Get the ID from the AJAX request
-$id = $_POST['$username'];
+// !changes made to only delete all tasks from a specific user
+$username = $_SESSION['username'];
 
 // Delete data based on ID
 $sql = "DELETE FROM tasks WHERE username = '$username'";
