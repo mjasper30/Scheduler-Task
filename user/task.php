@@ -1,46 +1,3 @@
-<?php
-// ! Start Session in the code
-session_start();
-// Replace with your database connection details
-date_default_timezone_set('Asia/Manila');
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "tasks";
-
-// Create a database connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Function to calculate remaining time
-function calculateRemainingTime($startTime)
-{
-    $currentTime = date("H:i:s");
-    $remainingTime = strtotime($startTime) - strtotime($currentTime);
-    return gmdate("H:i:s", $remainingTime);
-}
-
-if (isset($_POST['submitTask'])) {
-    $taskName = $_POST['taskName'];
-    $startTime = $_POST['startTime'];
-    $priority = $_POST['priority'];
-    $username = $_SESSION['username'];
-
-    // !added the session username for roles like user or admin
-
-    // Insert task into the database
-    $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('Task scheduled successfully');</script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -136,11 +93,55 @@ if (isset($_POST['submitTask'])) {
             background-color: #f2f2f2;
         }
     </style>
+    <link rel="stylesheet" href="../css/alert.css">
 </head>
 
 <body>
+    <?php
+    // ! Start Session in the code
+    session_start();
+    // Replace with your database connection details
+    date_default_timezone_set('Asia/Manila');
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "tasks";
+
+    // Create a database connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Function to calculate remaining time
+    function calculateRemainingTime($startTime)
+    {
+        $currentTime = date("H:i:s");
+        $remainingTime = strtotime($startTime) - strtotime($currentTime);
+        return gmdate("H:i:s", $remainingTime);
+    }
+
+    if (isset($_POST['submitTask'])) {
+        $taskName = $_POST['taskName'];
+        $startTime = $_POST['startTime'];
+        $priority = $_POST['priority'];
+        $username = $_SESSION['username'];
+
+        // !added the session username for roles like user or admin
+
+        // Insert task into the database
+        $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "<script src='../js/alert.js'></script><script>task_added_success();</script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+    ?>
     <!-- Test to see if the username displays in the session -->
-    <?php echo $_SESSION['username']; ?>
+    <?php //echo $_SESSION['username']; 
+    ?>
     <h1>Task Scheduler</h1>
     <br>
 
@@ -206,46 +207,6 @@ if (isset($_POST['submitTask'])) {
                 <th></th>
             </tr>
 
-            <?php
-            // Fetch tasks from the database
-            $sql = "SELECT * FROM tasks";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $taskId = $row['taskId'];
-                    $taskName = $row['taskName'];
-                    $startTime = $row['startTime'];
-                    $dateToday = $row['dateToday'];
-                    $timestamp = $dateToday;
-                    $readableFormat = date("F j, Y, g:i a", strtotime($timestamp));
-
-                    $remainingTime = calculateRemainingTime($startTime);
-                    $remainingSeconds = strtotime($remainingTime) - strtotime('TODAY');
-
-                    $hours = gmdate('H', $remainingSeconds);
-                    $minutes = gmdate('i', $remainingSeconds);
-                    $seconds = gmdate('s', $remainingSeconds);
-
-                    echo "<tr class='table-warning'>";
-                    echo "<td>$readableFormat</td>";
-                    echo "<td>$taskName</td>";
-                    echo "<td>$startTime</td>";
-                    echo "<td><span id='hours-$taskId'>$hours</span></td>";
-                    echo "<td><span id='minutes-$taskId'>$minutes</span></td>";
-                    echo "<td><span id='seconds-$taskId'>$seconds</span></td>";
-                    echo "<td>$remainingTime</td>";
-                    echo "<td id='elapsed-$taskId'>||</td>";
-                    echo "<td>";
-                    echo '<input class="btn btn-danger" type="button" id="deleteBtn" value="Delete" onclick="deleteData(' . $taskId . ');"></input>';
-                    echo "</td>";
-                    echo "<td>Priority Status no function yet!!</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='9' class='text-center'>No tasks found</td></tr>";
-            }
-            ?>
         </tbody>
     </table>
 
@@ -487,7 +448,7 @@ if (isset($_POST['submitTask'])) {
         //     }
         // }
     </script>
-
+    <script src="../js/alert.js"></script>
 </body>
 
 </html>

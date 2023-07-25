@@ -39,11 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($role == 'admin') {
             // Redirect to the dashboard or homepage
-            header("Location: dashboard.php");
+            header("Location: admin/task.php");
             exit();
         } else if ($role == 'user') {
             // Redirect to the dashboard or homepage
-            header("Location: test7.php");
+            header("Location: user/task.php");
             exit();
         } else {
             // Redirect to the dashboard or homepage
@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login Page</title>
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/alert.css">
 </head>
 
 <body>
@@ -100,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Add Bootstrap JS (Optional) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/alert.js"></script>
 </body>
 
 </html>

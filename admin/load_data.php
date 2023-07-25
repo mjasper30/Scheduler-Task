@@ -12,10 +12,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-$username = $_SESSION['username'];
 
 // Fetch tasks from the database
-$sql = "SELECT * FROM tasks WHERE username = '$username'";
+$sql = "SELECT * FROM tasks";
 $result = $conn->query($sql);
 
 // Start building the HTML for the table
@@ -75,30 +74,7 @@ while ($row = $result->fetch_assoc()) {
     if ($remainingTime == 0) {
         $tableHtml .= "<tr class='table-danger'>";
 
-        $modalHtml .= "<div class='modal show' id='modal_$taskId' tabindex='-1' role='dialog' aria-labelledby='modal_$taskId' aria-hidden='true'>";
-        $modalHtml .= "    <div class='modal-dialog-centered modal-dialog-md' role='document'>";
-        $modalHtml .= "        <div class='modal-content' style='background-color: #e64322;'>";
-        $modalHtml .= "            <div class='modal-header'>";
-        $modalHtml .= "                <h5 class='modal-title'>The task has now elapsed</h5>";
-        $modalHtml .= "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>";
-        $modalHtml .= "                    <span aria-hidden='true'>&times;</span>";
-        $modalHtml .= "                </button>";
-        $modalHtml .= "            </div>";
-        $modalHtml .= "            <div class='modal-body'>";
-        $modalHtml .= "                <p>The task $taskName has been completed.</p>";
-        $modalHtml .= "            </div>";
-        $modalHtml .= "            <div class='modal-footer'>";
-        $modalHtml .= "                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>";
-        $modalHtml .= "            </div>";
-        $modalHtml .= "        </div>";
-        $modalHtml .= "    </div>";
-        $modalHtml .= "</div>";
-
-        $modalScript .= "<script>document.getElementById('modal_$taskId').style.display = 'block';</script>";
-
-        // make the modal last long 
-        echo $modalScript;
-        echo $modalHtml;
+        echo "<script>show_elapse_alert();</script>";
 
         //  text to speech elapse
         echo "<script>convertToSpeechElapse('" . $taskName . "');</script>";
