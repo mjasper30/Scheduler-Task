@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $username = $_SESSION['username'];
 
 // Fetch tasks from the database
-$sql = "SELECT * FROM tasks WHERE username = '$username'";
+$sql = "SELECT * FROM tasks WHERE username = '$username' OR assign_to = '$username'";
 $result = $conn->query($sql);
 
 // Start building the HTML for the table
