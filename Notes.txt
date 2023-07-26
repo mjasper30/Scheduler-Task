@@ -16,3 +16,5 @@ finished already
 
 This code has the modal and text to speech when the time has elapsed
 
+// TODO: yung filtering nalang
+
