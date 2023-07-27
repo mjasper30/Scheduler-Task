@@ -1,47 +1,3 @@
-<?php
-// ! Start Session in the code
-session_start();
-// Replace with your database connection details
-date_default_timezone_set('Asia/Manila');
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "tasks";
-
-// Create a database connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Function to calculate remaining time
-function calculateRemainingTime($startTime)
-{
-    $currentTime = date("H:i:s");
-    $remainingTime = strtotime($startTime) - strtotime($currentTime);
-    return gmdate("H:i:s", $remainingTime);
-}
-
-if (isset($_POST['submitTask'])) {
-    $taskName = $_POST['taskName'];
-    $startTime = $_POST['startTime'];
-    $priority = $_POST['priority'];
-    $username = $_SESSION['username'];
-    $assign_to = $_POST['selected_option'];
-
-    // !added the session username for roles like user or admin
-
-    // Insert task into the database
-    $sql = "INSERT INTO tasks (username, taskName, startTime, priority, assign_to) VALUES ('$username', '$taskName', '$startTime', '$priority', '$assign_to')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('Task scheduled successfully');</script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -141,6 +97,49 @@ if (isset($_POST['submitTask'])) {
 </head>
 
 <body>
+    <?php
+        // ! Start Session in the code
+        session_start();
+        // Replace with your database connection details
+        date_default_timezone_set('Asia/Manila');
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "tasks";
+
+        // Create a database connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        // Function to calculate remaining time
+        function calculateRemainingTime($startTime)
+        {
+            $currentTime = date("H:i:s");
+            $remainingTime = strtotime($startTime) - strtotime($currentTime);
+            return gmdate("H:i:s", $remainingTime);
+        }
+
+        if (isset($_POST['submitTask'])) {
+            $taskName = $_POST['taskName'];
+            $startTime = $_POST['startTime'];
+            $priority = $_POST['priority'];
+            $username = $_SESSION['username'];
+            $assign_to = $_POST['selected_option'];
+
+            // !added the session username for roles like user or admin
+
+            // Insert task into the database
+            $sql = "INSERT INTO tasks (username, taskName, startTime, priority, assign_to) VALUES ('$username', '$taskName', '$startTime', '$priority', '$assign_to')";
+
+            if ($conn->query($sql) === TRUE) {
+                echo "<script src='../js/alert.js'></script><script>task_added_success();</script>";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        }
+    ?>
     <h1>Task Scheduler</h1>
     <br>
 

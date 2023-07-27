@@ -45,6 +45,7 @@ while ($row = $result->fetch_assoc()) {
     $startTime = $row['startTime'];
     $dateToday = $row['dateToday'];
     $priority = $row['priority'];
+    $assign = $row['assign_to'];
     $timestamp = $dateToday;
     $readableFormat = date("F j, Y, g:i a", strtotime($timestamp));
 
@@ -111,7 +112,11 @@ while ($row = $result->fetch_assoc()) {
 
     $tableHtml .= "<th>" . $priority . "</th>";
     $tableHtml .= "<td>";
-    $tableHtml .= "<input class='btn btn-danger' type='button' value='Delete' onclick='deleteData($taskId);'></input>";
+    if($assign == NULL){
+        $tableHtml .= "<input class='btn btn-danger' type='button' value='Delete' onclick='deleteData($taskId);'></input>";
+    }else{
+        $tableHtml .= "<p class='fw-bold text-danger'>You can't delete this task</p>";
+    }
     $tableHtml .= "</td>";
     $tableHtml .= "</tr>";
 }
