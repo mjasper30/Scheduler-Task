@@ -191,6 +191,8 @@
     </div>
 
     <br>
+    <!-- New clock element -->
+    <div id="clock" style="text-align: center; font-size: 24px; margin-top: 20px;"></div>
 
     <table class='table' id="taskTable">
         <tbody>
@@ -247,23 +249,6 @@
                 $("#taskTable tbody tr:has(th:contains('" + selectedPriority + "'))").show();
             }
         }
-
-        // ! this code is newly added
-        // function loadAllTasks() {
-
-        //     $.ajax({
-        //         url: "load_data.php",
-        //         type: "GET",
-        //         success: function(response) {
-        //             // Handle the response and update the table with the loaded data
-        //             filterTasksByPriority(); // Filter the tasks based on the selected priority
-        //             $("#taskTable tbody").html(response);
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.log(xhr.responseText);
-        //         }
-        //     });
-        // }
 
         // ! this code is newly added
         function filterTasksByPriority() {
@@ -404,24 +389,6 @@
             setInterval(updateTimeValues, 1000);
         }
 
-
-        // Schedule a task Text to Speech
-        // Uncoment to add the function back
-        // function convertToSpeech() {
-
-        // Get the text input from the user
-        //     var textInput = document.getElementById("taskName").value;
-
-        //     // Create a new SpeechSynthesisUtterance instance
-        //     var speech = new SpeechSynthesisUtterance();
-
-        //     // Set the text to be spoken
-        //     speech.text = textInput;
-
-        //     // Speak the text
-        //     speechSynthesis.speak(speech);
-        // }
-
         // *Elapsed Text to Speech
         // * TEXT TO SPEECH THE TASK NAME WHEN TEH TIME HAS ELAPSED
         function convertToSpeechElapse(taskName) {
@@ -442,23 +409,36 @@
             speechSynthesis.speak(speech).delay(3000);
         }
 
-        // *Sound notification
-        // *Testing to see if i can put a notification without a file like mp3
+        // Function to update the clock
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            const ampm = hours >= 12 ? 'pm' : 'am';
 
-        // function playTextToSpeech(text) {
-        //     if ('speechSynthesis' in window) {
-        //         var msg = new SpeechSynthesisUtterance();
-        //         msg.text = text;
+            // Convert to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12;
 
-        //         // Set the voice for speech synthesis (optional)
-        //         // Uncomment and modify according to your preferred voice
-        //         // var voices = speechSynthesis.getVoices();
-        //         // msg.voice = voices[0];
+            // Add leading zero to minutes and seconds if less than 10
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
 
-        //         // Play the speech
-        //         speechSynthesis.speak(msg);
-        //     }
-        // }
+            // Get the current date in a more readable format
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateToday = now.toLocaleDateString(undefined, dateOptions);
+
+            // Display the clock time and date in the 'clock' div
+            const clockText = hours + ':' + minutes + ':' + seconds + ' ' + ampm + ' - ' + dateToday;
+            document.getElementById('clock').innerText = clockText;
+        }
+
+        // Call the updateClock function initially to display the current time and date
+        updateClock();
+
+        // Call the updateClock function every 1 second for real-time updating
+        setInterval(updateClock, 1000);
     </script>
     <script src="../js/alert.js"></script>
 </body>
