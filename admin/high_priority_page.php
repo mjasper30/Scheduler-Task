@@ -1,47 +1,3 @@
-<?php
-// ! Start Session in the code
-session_start();
-// Replace with your database connection details
-date_default_timezone_set('Asia/Manila');
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "tasks";
-
-// Create a database connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Function to calculate remaining time
-function calculateRemainingTime($startTime)
-{
-    $currentTime = date("H:i:s");
-    $remainingTime = strtotime($startTime) - strtotime($currentTime);
-    return gmdate("H:i:s", $remainingTime);
-}
-
-if (isset($_POST['submitTask'])) {
-    $taskName = $_POST['taskName'];
-    $startTime = $_POST['startTime'];
-    $priority = $_POST['priority'];
-    $username = $_SESSION['username'];
-    $assign_to = $_POST['selected_option'];
-
-    // !added the session username for roles like user or admin
-
-    // Insert task into the database
-    $sql = "INSERT INTO tasks (username, taskName, startTime, priority, assign_to) VALUES ('$username', '$taskName', '$startTime', '$priority', '$assign_to')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('Task scheduled successfully');</script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -141,6 +97,51 @@ if (isset($_POST['submitTask'])) {
 </head>
 
 <body>
+    <?php
+    // ! Start Session in the code
+    session_start();
+    // Replace with your database connection details
+    date_default_timezone_set('Asia/Manila');
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "tasks";
+
+    // Create a database connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Function to calculate remaining time
+    function calculateRemainingTime($startTime)
+    {
+        $currentTime = date("H:i:s");
+        $remainingTime = strtotime($startTime) - strtotime($currentTime);
+        return gmdate("H:i:s", $remainingTime);
+    }
+
+    if (isset($_POST['submitTask'])) {
+        $taskName = $_POST['taskName'];
+        $startTime = $_POST['startTime'];
+        $priority = $_POST['priority'];
+        $username = $_SESSION['username'];
+
+        // !added the session username for roles like user or admin
+
+        // Insert task into the database
+        $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "<script src='../js/alert.js'></script><script>task_added_success();</script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+    ?>
+    <!-- Test to see if the username displays in the session -->
+    <?php //echo $_SESSION['username']; 
+    ?>
     <h1>Task Scheduler</h1>
     <br>
 
@@ -155,25 +156,10 @@ if (isset($_POST['submitTask'])) {
                 <label for="startTime" class="form-label">Start Time:</label>
                 <input type="time" id="startTime" name="startTime" class="form-select-sm" required>
             </div>
-            <label for="selectOption">Assign to:</label>
-            <select class="form-select-sm mb-3" id="selectOption" name="selected_option" required>
-                <option selected disabled value="">---Select person---</option>
-                <?php
-
-                // Query to fetch values from your database (change the table name and column name as needed)
-                $query = "SELECT username FROM users";
-                $result = mysqli_query($conn, $query);
-                // Loop through the fetched data and create the options for the select dropdown
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $username = $row['username'];
-                    echo "<option value='$username'>$username</option>";
-                }
-                ?>
-            </select>
             <div class="mb-3">
                 <label for="priority" class="form-label">Priority:</label>
                 <select class="form-select-sm" id="priority" name="priority" required>
-                    <option selected disabled value="">--Choose the priority---</option>
+                    <option selected disabled value="">Choose the priority</option>
                     <option value="High">High</option>
                     <option value="Normal">Normal</option>
                     <option value="Minimal">Minimal</option>
@@ -197,7 +183,6 @@ if (isset($_POST['submitTask'])) {
                 <option value="Minimal">Minimal</option>
             </select>
         </div>
-
     </div>
 
     <br>
@@ -392,7 +377,7 @@ if (isset($_POST['submitTask'])) {
             // Perform actions to load data or update the page as needed
             // For example, you can make another AJAX request to fetch and display updated data
             $.ajax({
-                url: "load_data.php",
+                url: "load_data_high.php",
                 type: "GET",
                 success: function(response) {
                     // *Handle the response and update the page with the loaded data
