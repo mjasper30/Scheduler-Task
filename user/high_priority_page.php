@@ -173,7 +173,7 @@
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </div>
         <!-- !this code is newly added -->
-        <!-- <a href="high_priority_page.php">High Filter</a> -->
+
         <div class="container mt-2">
             <label for="priorityFilter" class="form-label">Filter by Priority:</label>
             <select class="form-select-sm" id="priorityFilter" name="priorityFilter" onchange="navigateToPriorityPage()">
@@ -183,11 +183,6 @@
                 <option value="Minimal">Minimal</option>
             </select>
         </div>
-
-        <div class="mt-2">
-            <button onclick="confirmFilterByPriority()" class="btn btn-primary mr-2">Confirm Filter</button>
-        </div>
-
     </div>
 
     <br>
@@ -382,7 +377,7 @@
             // Perform actions to load data or update the page as needed
             // For example, you can make another AJAX request to fetch and display updated data
             $.ajax({
-                url: "load_data.php",
+                url: "load_data_high.php",
                 type: "GET",
                 success: function(response) {
                     // *Handle the response and update the page with the loaded data
