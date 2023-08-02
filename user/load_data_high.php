@@ -36,10 +36,6 @@ $tableHtml = "<table class='table' id='taskTable'>
     </thead>
     <tbody>";
 
-// ! delete this later and in other load.php old modal container
-$modalHtml = ""; // Store the modal HTML
-$modalScript = ""; // Store the JavaScript code to trigger the modal
-
 while ($row = $result->fetch_assoc()) {
     $taskId = $row['taskId'];
     $taskName = $row['taskName'];
