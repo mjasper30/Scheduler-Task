@@ -127,8 +127,6 @@
         $priority = $_POST['priority'];
         $username = $_SESSION['username'];
 
-        // !added the session username for roles like user or admin
-
         // Insert task into the database
         $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
 
@@ -140,10 +138,13 @@
     }
     ?>
     <!-- Test to see if the username displays in the session -->
-    <?php //echo $_SESSION['username']; 
-    ?>
+    <!-- <?php //echo $_SESSION['username'];
+            ?>  -->
+
     <h1>Task Scheduler</h1>
     <br>
+    <!-- Declare the audio for Notification Sound -->
+    <audio id="notificationSound" src="../database/iphone_alert.mp3"></audio>
 
     <!-- !Edited here for a better look in the user page -->
     <div class="container mt-2">
@@ -289,7 +290,6 @@
             }
         }
 
-
         function updateTimeValues() {
             // Iterate through each table row and update the time values
             $("#taskTable tbody tr").each(function() {
@@ -392,10 +392,7 @@
         // *Elapsed Text to Speech
         // * TEXT TO SPEECH THE TASK NAME WHEN TEH TIME HAS ELAPSED
         function convertToSpeechElapse(taskName) {
-            // Get the text input from the user
-
-            var taskName;
-            var textInput1 = taskName + 'this task has now elapsed';
+            var textInput1 = taskName + ' this task has now elapsed';
 
             // Create a new SpeechSynthesisUtterance instance
             var speech = new SpeechSynthesisUtterance();
@@ -403,10 +400,12 @@
             // Set the text to be spoken
             speech.text = textInput1;
 
+            // set the accent or language to filipino
+            //! change this code to your liking accent
+            speech.lang = 'fil';
+
             // Speak the text
-            // problem was in the modal version which is this the text to speech after the time elapse wont work
-            // because the statement move fast so we put delay to let the code execute this 
-            speechSynthesis.speak(speech).delay(3000);
+            speechSynthesis.speak(speech);
         }
 
         // Function to update the clock
@@ -426,7 +425,12 @@
             seconds = seconds < 10 ? '0' + seconds : seconds;
 
             // Get the current date in a more readable format
-            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateOptions = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
             const dateToday = now.toLocaleDateString(undefined, dateOptions);
 
             // Display the clock time and date in the 'clock' div

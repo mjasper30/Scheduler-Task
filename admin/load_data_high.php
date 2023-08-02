@@ -1,6 +1,6 @@
 <?php
 session_start();
-// Replace with your database connection details
+// *Set time zone to Manila
 date_default_timezone_set('Asia/Manila');
 $servername = "localhost";
 $username = "root";
@@ -36,9 +36,6 @@ $tableHtml = "<table class='table' id='taskTable'>
     </thead>
     <tbody>";
 
-$modalHtml = ""; // Store the modal HTML
-$modalScript = ""; // Store the JavaScript code to trigger the modal
-
 while ($row = $result->fetch_assoc()) {
     $taskId = $row['taskId'];
     $taskName = $row['taskName'];
@@ -71,17 +68,55 @@ while ($row = $result->fetch_assoc()) {
     $minutesCurrent = floor(($elapsedTime % 3600) / 60);
     $secondsCurrent = $elapsedTime % 60;
 
-    // Modal logic
+    // Modal logic old
+    // if ($remainingTime == 0) {
+    //     $tableHtml .= "<tr class='table-danger'>";
+
+    //     echo "<script>
+    //     setTimeout(function() {
+    //         document.getElementById('notificationSound').play();
+    //     }, 2000); // 2000 milliseconds (2 seconds) delay
+    // </script>";
+
+    //     echo "<script>show_elapse_alert();</script>";
+
+    //  text to speech elapse
+    //     echo "<script>convertToSpeechElapse('" . $taskName . "');</script>";
+
+    // * Modal Logic
+    // * MODAL, NOTIFICATION SOUND, TEXT TO SPEECH with delay
     if ($remainingTime == 0) {
         $tableHtml .= "<tr class='table-danger'>";
 
-        echo "<script>show_elapse_alert();</script>";
+        //* Notification Sound
+        echo "<script>
+          document.getElementById('notificationSound').play();  
+        </script>";
 
-        //  text to speech elapse
-        echo "<script>convertToSpeechElapse('" . $taskName . "');</script>";
+        //* Modal Alert
+        echo "<script>
+            show_elapse_alert(); // Show the modal first
+        </script>";
 
-        // ! sleep did not work on delaying the modal it delayed this whole condition
-        // sleep(3);
+        //* Text to Speech with delay
+        echo "<script>
+            async function convertToSpeechElapse(taskName) {
+                var textInput1 = taskName + ' this task has now elapsed';
+                var speech = new SpeechSynthesisUtterance();
+                speech.text = textInput1;
+                speech.lang = 'fil';
+                speech.onend = function() {
+                    // Place any code here that you want to execute after the text-to-speech finishes
+                };
+                await speechSynthesis.speak(speech);
+            }
+    
+            setTimeout(function() {
+                convertToSpeechElapse('" . $taskName . "'); // Call the text-to-speech function after a 5-second delay
+            }, 1000); // 1000 milliseconds (1 seconds) delay
+        </script>";
+        // "blank space" >_<
+
     } else if ($remainingTime < 0) {
         $tableHtml .= "<tr class='table-danger'>";
     } else {

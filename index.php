@@ -38,15 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['role'] = $row['role'];
 
         if ($role == 'admin') {
-            // Redirect to the dashboard or homepage
+            // Redirect to admin page
             header("Location: admin/task.php");
             exit();
         } else if ($role == 'user') {
-            // Redirect to the dashboard or homepage
+            // Redirect to user page
             header("Location: user/task.php");
             exit();
         } else {
-            // Redirect to the dashboard or homepage
+            // Redirect back to index
             header("Location: index.php");
             exit();
         }
