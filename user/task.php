@@ -227,10 +227,6 @@
             setInterval(loadData, 1000);
             setInterval(updateTimeValues, 1000);
 
-            // ! this code is newly added
-            // loadAllTasks();
-
-
         });
         // ! this code is newly added
         function confirmFilterByPriority() {

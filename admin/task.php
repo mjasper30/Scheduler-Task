@@ -98,51 +98,52 @@
 
 <body>
     <?php
-        // ! Start Session in the code
-        session_start();
-        // Replace with your database connection details
-        date_default_timezone_set('Asia/Manila');
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "tasks";
+    // ! Start Session in the code
+    session_start();
+    // Replace with your database connection details
+    date_default_timezone_set('Asia/Manila');
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "tasks";
 
-        // Create a database connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+    // Create a database connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Function to calculate remaining time
+    function calculateRemainingTime($startTime)
+    {
+        $currentTime = date("H:i:s");
+        $remainingTime = strtotime($startTime) - strtotime($currentTime);
+        return gmdate("H:i:s", $remainingTime);
+    }
+
+    if (isset($_POST['submitTask'])) {
+        $taskName = $_POST['taskName'];
+        $startTime = $_POST['startTime'];
+        $priority = $_POST['priority'];
+        $username = $_SESSION['username'];
+        $assign_to = $_POST['selected_option'];
+
+        // !added the session username for roles like user or admin
+
+        // Insert task into the database
+        $sql = "INSERT INTO tasks (username, taskName, startTime, priority, assign_to) VALUES ('$username', '$taskName', '$startTime', '$priority', '$assign_to')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "<script src='../js/alert.js'></script><script>task_added_success();</script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
         }
-
-        // Function to calculate remaining time
-        function calculateRemainingTime($startTime)
-        {
-            $currentTime = date("H:i:s");
-            $remainingTime = strtotime($startTime) - strtotime($currentTime);
-            return gmdate("H:i:s", $remainingTime);
-        }
-
-        if (isset($_POST['submitTask'])) {
-            $taskName = $_POST['taskName'];
-            $startTime = $_POST['startTime'];
-            $priority = $_POST['priority'];
-            $username = $_SESSION['username'];
-            $assign_to = $_POST['selected_option'];
-
-            // !added the session username for roles like user or admin
-
-            // Insert task into the database
-            $sql = "INSERT INTO tasks (username, taskName, startTime, priority, assign_to) VALUES ('$username', '$taskName', '$startTime', '$priority', '$assign_to')";
-
-            if ($conn->query($sql) === TRUE) {
-                echo "<script src='../js/alert.js'></script><script>task_added_success();</script>";
-            } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
-        }
+    }
     ?>
     <h1>Task Scheduler</h1>
     <br>
-
+    <!-- Declare the audio for Notification Sound -->
+    <audio id="notificationSound" src="../database/iphone_alert.mp3"></audio>
     <!-- !Edited here for a better look in the user page -->
     <div class="container mt-2">
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -234,10 +235,6 @@
             // Update the time values every second
             setInterval(loadData, 1000);
             setInterval(updateTimeValues, 1000);
-
-            // ! this code is newly added
-            // loadAllTasks();
-
 
         });
         // ! this code is newly added
@@ -435,7 +432,12 @@
             seconds = seconds < 10 ? '0' + seconds : seconds;
 
             // Get the current date in a more readable format
-            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateOptions = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
             const dateToday = now.toLocaleDateString(undefined, dateOptions);
 
             // Display the clock time and date in the 'clock' div

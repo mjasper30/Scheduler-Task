@@ -127,8 +127,6 @@
         $priority = $_POST['priority'];
         $username = $_SESSION['username'];
 
-        // !added the session username for roles like user or admin
-
         // Insert task into the database
         $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
 
@@ -219,10 +217,6 @@
             setInterval(loadData, 1000);
             setInterval(updateTimeValues, 1000);
 
-            // ! this code is newly added
-            // loadAllTasks();
-
-
         });
         // ! this code is newly added
         function confirmFilterByPriority() {
@@ -242,23 +236,6 @@
                 $("#taskTable tbody tr:has(th:contains('" + selectedPriority + "'))").show();
             }
         }
-
-        // ! this code is newly added
-        // function loadAllTasks() {
-
-        //     $.ajax({
-        //         url: "load_data.php",
-        //         type: "GET",
-        //         success: function(response) {
-        //             // Handle the response and update the table with the loaded data
-        //             filterTasksByPriority(); // Filter the tasks based on the selected priority
-        //             $("#taskTable tbody").html(response);
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.log(xhr.responseText);
-        //         }
-        //     });
-        // }
 
         // ! this code is newly added
         function filterTasksByPriority() {
@@ -398,24 +375,6 @@
             // *Update the time values every second
             setInterval(updateTimeValues, 1000);
         }
-
-
-        // Schedule a task Text to Speech
-        // Uncoment to add the function back
-        // function convertToSpeech() {
-
-        // Get the text input from the user
-        //     var textInput = document.getElementById("taskName").value;
-
-        //     // Create a new SpeechSynthesisUtterance instance
-        //     var speech = new SpeechSynthesisUtterance();
-
-        //     // Set the text to be spoken
-        //     speech.text = textInput;
-
-        //     // Speak the text
-        //     speechSynthesis.speak(speech);
-        // }
 
         // *Elapsed Text to Speech
         // * TEXT TO SPEECH THE TASK NAME WHEN TEH TIME HAS ELAPSED
