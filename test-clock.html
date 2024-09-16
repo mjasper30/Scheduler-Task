@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Try Design a simple clock</title>
+    <style>
+        /* Styles for the clock container */
+        .clock-container {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            border: 2px solid #333; /* Add a border */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #f9f9f9; /* Light gray background */
+            padding: 10px; /* Add some padding inside the container */
+            box-shadow: 0px 0px 10px rgba(0, 0, 255, 0.5); /* Blue box shadow */
+            width: 200px; /* Set a fixed width for the container */
+            margin: 0 auto; /* Center the container horizontally */
+        }
+    </style>
+</head>
+<body>
+    <div id="clock" class="clock-container"> <!-- Apply the "clock-container" class -->
+        <!-- Clock content will be dynamically generated using JavaScript -->
+    </div>
+
+    <script>
+        // JavaScript code to update the clock
+        function updateClock() {
+            // Your code to update the clock goes here
+            // For example, you can use the Date object to get the current time and date
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            var day = now.toLocaleDateString('en-US', { weekday: 'long' }); // Get the current day (e.g., Monday)
+            var month = now.toLocaleDateString('en-US', { month: 'long' }); // Get the current month (e.g., August)
+            var date = now.getDate(); // Get the current date (e.g., 2)
+            var ampm = hours >= 12 ? 'PM' : 'AM'; // Determine AM or PM
+
+            // Convert to 12-hour format
+            hours = (hours % 12) || 12;
+            var timeString = hours + ":" + minutes + ":" + seconds + " " + ampm;
+            var dateString = day + ", " + month + " " + date;
+
+            var clockDiv = document.getElementById('clock');
+            clockDiv.innerHTML = timeString + "<br>" + dateString; // Display the time and date
+        }
+
+        // Call the updateClock function every second (1000 ms)
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-// Replace with your database connection details
+// *Set time zone to Manila
 date_default_timezone_set('Asia/Manila');
 $servername = "localhost";
 $username = "root";
@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $username = $_SESSION['username'];
 
 // Fetch tasks from the database
-$sql = "SELECT * FROM tasks WHERE username = '$username' OR assign_to = '$username'";
+$sql = "SELECT * FROM tasks WHERE (username = '$username' OR assign_to = '$username') AND priority = 'Normal'";
 $result = $conn->query($sql);
 
 // Start building the HTML for the table
@@ -45,7 +45,6 @@ while ($row = $result->fetch_assoc()) {
     $startTime = $row['startTime'];
     $dateToday = $row['dateToday'];
     $priority = $row['priority'];
-    $assign = $row['assign_to'];
     $timestamp = $dateToday;
     $readableFormat = date("F j, Y, g:i a", strtotime($timestamp));
 
@@ -57,8 +56,6 @@ while ($row = $result->fetch_assoc()) {
     $seconds = gmdate('s', $remainingTime);
 
     // ! Modify by jasper make it so that when time elapses instead of 24 hour count start from 0 seconds
-    // ! thanks per
-
     // Get the current time
     $currentTimestamp = time();
 
@@ -152,11 +149,7 @@ while ($row = $result->fetch_assoc()) {
 
     $tableHtml .= "<th>" . $priority . "</th>";
     $tableHtml .= "<td>";
-    if ($assign == NULL) {
-        $tableHtml .= "<input class='btn btn-danger' type='button' value='Delete' onclick='deleteData($taskId);'></input>";
-    } else {
-        $tableHtml .= "<p class='fw-bold text-danger'>You can't delete this task</p>";
-    }
+    $tableHtml .= "<input class='btn btn-danger' type='button' value='Delete' onclick='deleteData($taskId);'></input>";
     $tableHtml .= "</td>";
     $tableHtml .= "</tr>";
 }

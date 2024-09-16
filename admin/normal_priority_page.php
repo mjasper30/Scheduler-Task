@@ -127,6 +127,8 @@
         $priority = $_POST['priority'];
         $username = $_SESSION['username'];
 
+        // !added the session username for roles like user or admin
+
         // Insert task into the database
         $sql = "INSERT INTO tasks (username, taskName, startTime, priority) VALUES ('$username', '$taskName', '$startTime', '$priority')";
 
@@ -138,13 +140,10 @@
     }
     ?>
     <!-- Test to see if the username displays in the session -->
-    <!-- <?php //echo $_SESSION['username'];
-            ?>  -->
-
+    <?php //echo $_SESSION['username']; 
+    ?>
     <h1>Task Scheduler</h1>
     <br>
-    <!-- Declare the audio for Notification Sound -->
-    <audio id="notificationSound" src="../database/iphone_alert.mp3"></audio>
 
     <!-- !Edited here for a better look in the user page -->
     <div class="container mt-2">
@@ -174,7 +173,7 @@
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </div>
         <!-- !this code is newly added -->
-        <!-- <a href="high_priority_page.php">High Filter</a> -->
+
         <div class="container mt-2">
             <label for="priorityFilter" class="form-label">Filter by Priority:</label>
             <select class="form-select-sm" id="priorityFilter" name="priorityFilter" onchange="navigateToPriorityPage()">
@@ -185,15 +184,9 @@
             </select>
         </div>
 
-        <div class="mt-2">
-            <button onclick="confirmFilterByPriority()" class="btn btn-primary mr-2">Confirm Filter</button>
-        </div>
-
     </div>
 
     <br>
-    <!-- New clock element -->
-    <div id="clock" style="text-align: center; font-size: 24px; margin-top: 20px;"></div>
 
     <table class='table' id="taskTable">
         <tbody>
@@ -286,6 +279,7 @@
             }
         }
 
+
         function updateTimeValues() {
             // Iterate through each table row and update the time values
             $("#taskTable tbody tr").each(function() {
@@ -363,7 +357,7 @@
             // Perform actions to load data or update the page as needed
             // For example, you can make another AJAX request to fetch and display updated data
             $.ajax({
-                url: "load_data.php",
+                url: "load_data_normal.php",
                 type: "GET",
                 success: function(response) {
                     // *Handle the response and update the page with the loaded data
@@ -388,7 +382,10 @@
         // *Elapsed Text to Speech
         // * TEXT TO SPEECH THE TASK NAME WHEN TEH TIME HAS ELAPSED
         function convertToSpeechElapse(taskName) {
-            var textInput1 = taskName + ' this task has now elapsed';
+            // Get the text input from the user
+
+            var taskName;
+            var textInput1 = taskName + 'this task has now elapsed';
 
             // Create a new SpeechSynthesisUtterance instance
             var speech = new SpeechSynthesisUtterance();
@@ -396,49 +393,29 @@
             // Set the text to be spoken
             speech.text = textInput1;
 
-            // set the accent or language to filipino
-            //! change this code to your liking accent
-            speech.lang = 'fil';
-
             // Speak the text
-            speechSynthesis.speak(speech);
+            // problem was in the modal version which is this the text to speech after the time elapse wont work
+            // because the statement move fast so we put delay to let the code execute this 
+            speechSynthesis.speak(speech).delay(3000);
         }
 
-        // Function to update the clock
-        function updateClock() {
-            const now = new Date();
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
-            const ampm = hours >= 12 ? 'pm' : 'am';
+        // *Sound notification
+        // *Testing to see if i can put a notification without a file like mp3
 
-            // Convert to 12-hour format
-            hours = hours % 12;
-            hours = hours ? hours : 12;
+        // function playTextToSpeech(text) {
+        //     if ('speechSynthesis' in window) {
+        //         var msg = new SpeechSynthesisUtterance();
+        //         msg.text = text;
 
-            // Add leading zero to minutes and seconds if less than 10
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
+        // Set the voice for speech synthesis (optional)
+        // Uncomment and modify according to your preferred voice
+        // var voices = speechSynthesis.getVoices();
+        // msg.voice = voices[0];
 
-            // Get the current date in a more readable format
-            const dateOptions = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            const dateToday = now.toLocaleDateString(undefined, dateOptions);
-
-            // Display the clock time and date in the 'clock' div
-            const clockText = hours + ':' + minutes + ':' + seconds + ' ' + ampm + ' - ' + dateToday;
-            document.getElementById('clock').innerText = clockText;
-        }
-
-        // Call the updateClock function initially to display the current time and date
-        updateClock();
-
-        // Call the updateClock function every 1 second for real-time updating
-        setInterval(updateClock, 1000);
+        // Play the speech
+        //         speechSynthesis.speak(msg);
+        //     }
+        // }
     </script>
     <script src="../js/alert.js"></script>
 </body>
